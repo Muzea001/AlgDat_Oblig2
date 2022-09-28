@@ -144,7 +144,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean inneholder(T verdi) {
-        throw new UnsupportedOperationException();
+        return indeksTil(verdi)!=-1;
+
     }
 
     private Node<T> finnNode(int indeks) {
@@ -178,14 +179,23 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public int indeksTil(T verdi) {
-        throw new UnsupportedOperationException();
+        if (verdi==null){
+            return -1;
+        }
+        Node<T> midlertidig = hode;
+        for (int i = 0; i < antall; i++, midlertidig=midlertidig.neste) {
+            if (midlertidig.verdi.equals(verdi)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void fraTilKontroll(int tabellLengde, int fra, int til) {
         if (fra < 0 || til > tabellLengde) {
             throw new IndexOutOfBoundsException();
         }
-        if (fra >= til) {
+        if (fra > til) {
             throw new IllegalArgumentException();
         }
     }
@@ -234,7 +244,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             sb.append(midlertidig.verdi);
             midlertidig = midlertidig.neste;
             while (midlertidig != null) {
-                sb.append(",");
+                sb.append(", ");
                 sb.append(midlertidig.verdi);
                 midlertidig = midlertidig.neste;
             }
@@ -257,7 +267,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             sb.append(midlertidig.verdi);
             midlertidig = midlertidig.forrige;
             while (midlertidig != null) {
-                sb.append(",");
+                sb.append(", ");
                 sb.append(midlertidig.verdi);
                 midlertidig = midlertidig.forrige;
             }
