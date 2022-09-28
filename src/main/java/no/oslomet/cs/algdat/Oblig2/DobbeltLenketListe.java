@@ -38,10 +38,9 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     public DobbeltLenketListe() {
         hode = null;
-        hale= null;
+        hale = null;
         antall = 0;
         endringer = 0;
-
 
 
     }
@@ -49,15 +48,15 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public DobbeltLenketListe(T[] a) {
 
         // sjekker om tabellen er en null tabell, kaster exception.
-        if (a==null){
+        if (a == null) {
             throw new NullPointerException();
         }
 
         //Finner første ikke null element og legger den som hode.
-        if (a.length>0){
+        if (a.length > 0) {
             int i = 0;
-            for (; i <a.length ; i++) {
-                if (a[i]!=null){
+            for (; i < a.length; i++) {
+                if (a[i] != null) {
                     hode = new Node<>(a[i]);
                     antall++;
                     break;
@@ -66,21 +65,18 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
             // lager hale som peker på sammen element som hode, bytter halet ved neste non null element.
             hale = hode;
-            if (hode!=null){
+            if (hode != null) {
                 i++;
                 // lager resten av listen, bytter på hale pekeren ved hvert nytt element.
-                for (;i<a.length;i++){
-                    if (a[i]!=null){
-                        hale.neste = new Node<>(a[i],hale,null);
-                        hale=hale.neste;
+                for (; i < a.length; i++) {
+                    if (a[i] != null) {
+                        hale.neste = new Node<>(a[i], hale, null);
+                        hale = hale.neste;
                         antall++;
                     }
                 }
             }
         }
-
-
-
 
 
     }
@@ -91,12 +87,16 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public int antall() {
-        throw new UnsupportedOperationException();
+        return antall;
     }
 
     @Override
     public boolean tom() {
-        throw new UnsupportedOperationException();
+        if (hode == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -198,6 +198,10 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
-} // class DobbeltLenketListe
+
+
+}
+
+// class DobbeltLenketListe
 
 
