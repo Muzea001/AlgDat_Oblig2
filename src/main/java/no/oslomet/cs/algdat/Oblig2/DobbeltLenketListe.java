@@ -83,16 +83,21 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public Liste<T> subliste(int fra, int til) {
+        // kaller på hjelpemetoden for å sjekke om det er lovlige argumenter.
         fraTilKontroll(antall, fra, til);
+        // definerer ny liste.
         Liste<T> subListe = new DobbeltLenketListe<>();
+        //setter listens lengde og sjekker om den er 0.
         int lengde = til - fra;
         if (lengde < 1) {
             return subListe;
         }
+        // henter node som ligger i fra indeks og legger den først i listen, setter pekeren til node.neste i hver loop.
         Node<T> hjelpeNode = finnNode(fra);
         while (lengde > 0) {
             subListe.leggInn(hjelpeNode.verdi);
             hjelpeNode = hjelpeNode.neste;
+            // vi looper like mange ganger som listens lengde, går ned med 1 i hver iterasjon.
             lengde--;
         }
         return subListe;
@@ -139,7 +144,42 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public void leggInn(int indeks, T verdi) {
-        throw new UnsupportedOperationException();
+        // Sjekker om verdien er nullobjekt.
+        Objects.requireNonNull(verdi,"verdien er null!");
+
+        //Sjekker om indeksen er større enn listens lengde.
+        if (indeks>antall){
+            throw new IndexOutOfBoundsException("indeks er større en listens lengde");
+        }
+        //Sjekker om indeksen er mindre enn null.
+        else if(indeks<0){
+            throw new IndexOutOfBoundsException("indeksen er negativ!");
+        }
+        //hvis listen er tom så blir den nye verdien hode og hale.
+        if (antall==0 && indeks==0){
+            hode = new Node<T>(verdi,null,null);
+            hale= hode;
+        }
+        //hvis verdien skal legges på slutten, bytter vi vi pekere til den nye halen.
+        else if (indeks==antall){
+            hale = new Node<T>(verdi,hale,null);
+            hale.forrige.neste = hale;
+        }
+        else if(indeks==0){
+            hode = new Node<T>(verdi,null,hode);
+            hode.neste.forrige = hode;
+        }
+        else {
+            //hvis verdien skal legges i midten, bytter vi pekerene til forrige og neste node.
+            Node<T> node = hode;
+            for (int i = 0; i <indeks ; i++) {
+                node = node.neste;
+            }
+            node.neste.forrige = node;
+            node.forrige.neste = node;
+        }
+        antall++;
+        endringer++;
     }
 
     @Override
@@ -179,11 +219,15 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public int indeksTil(T verdi) {
+        //sjekker om verdi er null, returnerer -1 om den er.
         if (verdi==null){
             return -1;
         }
+
+        // looper gjennom arrayet og setter node pekeren til node.neste i hver loop.
         Node<T> midlertidig = hode;
         for (int i = 0; i < antall; i++, midlertidig=midlertidig.neste) {
+            //når argument verdien er den samme som node verdien har vi funnet elementet og vi returnerer indeks.
             if (midlertidig.verdi.equals(verdi)){
                 return i;
             }
