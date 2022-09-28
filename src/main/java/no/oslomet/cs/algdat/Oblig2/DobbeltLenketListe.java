@@ -135,9 +135,33 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
+    private Node<T> finnNode(int indeks){
+        //sjekker om indeks finnes i listen, returnerer false hvis ikke.
+        indeksKontroll(indeks,false);
+        Node<T> midlertidig;
+
+        //hvis indeks er mindre enn liste/2 starter fra hode og setter hode til midlertidig node og setter pekeren til midlertidig.neste i hver iterasjon. stopper loopen på indeks.
+        if (indeks<antall/2){
+            midlertidig= hode;
+            for (int i = 0; i <indeks ; i++) {
+                midlertidig=midlertidig.neste;
+            }
+            return midlertidig;
+        }
+        // Hvis indeks er større enn liste/2 starter fra hale og setter hale til midlertidig node og setter pekeren til midlertidig.forrige i hver iterasjon. stopper loopen ved indeks.
+        else {
+            midlertidig= hale;
+            for (int i = 0; i >indeks ; i--) {
+                midlertidig = midlertidig.forrige;
+            }
+            return midlertidig;
+        }
+    }
+
     @Override
     public T hent(int indeks) {
-        throw new UnsupportedOperationException();
+        Node<T> midlertidig = finnNode(indeks);
+        return midlertidig.verdi;
     }
 
     @Override
