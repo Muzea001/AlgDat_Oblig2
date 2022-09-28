@@ -37,11 +37,52 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     private int endringer;         // antall endringer i listen
 
     public DobbeltLenketListe() {
-        throw new UnsupportedOperationException();
+        hode = null;
+        hale= null;
+        antall = 0;
+        endringer = 0;
+
+
+
     }
 
     public DobbeltLenketListe(T[] a) {
-        throw new UnsupportedOperationException();
+
+        // sjekker om tabellen er en null tabell, kaster exception.
+        if (a==null){
+            throw new NullPointerException();
+        }
+
+        //Finner første ikke null element og legger den som hode.
+        if (a.length>0){
+            int i = 0;
+            for (; i <a.length ; i++) {
+                if (a[i]!=null){
+                    hode = new Node<>(a[i]);
+                    antall++;
+                    break;
+                }
+            }
+
+            // lager hale som peker på sammen element som hode, bytter halet ved neste non null element.
+            hale = hode;
+            if (hode!=null){
+                i++;
+                // lager resten av listen, bytter på hale pekeren ved hvert nytt element.
+                for (;i<a.length;i++){
+                    if (a[i]!=null){
+                        hale.neste = new Node<>(a[i],hale,null);
+                        hale=hale.neste;
+                        antall++;
+                    }
+                }
+            }
+        }
+
+
+
+
+
     }
 
     public Liste<T> subliste(int fra, int til) {
