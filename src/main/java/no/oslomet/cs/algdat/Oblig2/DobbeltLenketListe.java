@@ -146,11 +146,31 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
+        //Setter en midlertidig node som hode for å kunne traversere gjennom listen. lager stringbuilder.
+        Node<T> midlertidig = hode;
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+
+        //sjekker om listen er tom og returnerer tom string hvis den er.
+        if (tom()){
+            sb.append("]");
+            return sb.toString();
+        }
+        // Traverserer gjennom arrayet, bytter peker til neste nodet i hver iterasjon og appender verdien deres, setter komma i mellom hver verdi.
+        else {
+            sb.append(midlertidig.verdi);
+            midlertidig = midlertidig.neste;
+            while (midlertidig!=null){
+                sb.append(",");
+                sb.append(midlertidig.verdi);
+                midlertidig = midlertidig.neste;
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     public String omvendtString() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
