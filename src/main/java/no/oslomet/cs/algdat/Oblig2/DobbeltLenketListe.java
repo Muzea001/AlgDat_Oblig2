@@ -6,6 +6,7 @@ package no.oslomet.cs.algdat.Oblig2;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Objects;
 
 
 public class DobbeltLenketListe<T> implements Liste<T> {
@@ -101,7 +102,27 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public boolean leggInn(T verdi) {
-        throw new UnsupportedOperationException();
+        //Sjekker om verdien som skal settes inn ikke er null;
+        Objects.requireNonNull(verdi);
+        Node<T> NyttNode = new Node<>(verdi);
+        // sjekker om listen er helt tom, da peker hode og halle til den nye noden, antall endringer og antall noder øker med 1.
+        if (hode==null&& hale==null &&  antall == 0){
+            hode=NyttNode;
+            hale=NyttNode;
+            endringer++;
+            antall++;
+            return true;
+        }
+        // hvis listen ikke er tom da er halen verdien før den som settes inn, bytter hale pekere til den nye noden og setter halen til nye node.
+        else {
+            NyttNode.forrige=hale;
+            hale.neste = NyttNode;
+            hale= NyttNode;
+            endringer++;
+            antall++;
+            return  true;
+        }
+
     }
 
     @Override
@@ -156,7 +177,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             sb.append("]");
             return sb.toString();
         }
-        // Traverserer gjennom arrayet, bytter peker til neste nodet i hver iterasjon og appender verdien deres, setter komma i mellom hver verdi.
+        // Traverserer gjennom listen, bytter peker til neste nodet i hver iterasjon og appender verdien deres, setter komma i mellom hver verdi.
         else {
             sb.append(midlertidig.verdi);
             midlertidig = midlertidig.neste;
@@ -174,10 +195,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         Node<T> midlertidig = hale;
         StringBuilder sb = new StringBuilder();
         sb.append("[");
+        //sjekker om listen er tom og returnerer tom string hvis den er.
         if (tom()){
             sb.append("]");
             return sb.toString();
         }
+        //traverserer gjennom listen baklengs, noden peker mot forrige node i hver iterasjon og appender verdien.
         else {
             sb.append(midlertidig.verdi);
             midlertidig = midlertidig.forrige;
