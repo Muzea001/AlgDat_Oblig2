@@ -83,16 +83,16 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public Liste<T> subliste(int fra, int til) {
-        fraTilKontroll(antall,fra,til);
+        fraTilKontroll(antall, fra, til);
         Liste<T> subListe = new DobbeltLenketListe<>();
-        int lengde = til-fra;
-        if (lengde<1){
+        int lengde = til - fra;
+        if (lengde < 1) {
             return subListe;
         }
         Node<T> hjelpeNode = finnNode(fra);
-        while (lengde>0){
+        while (lengde > 0) {
             subListe.leggInn(hjelpeNode.verdi);
-            hjelpeNode=hjelpeNode.neste;
+            hjelpeNode = hjelpeNode.neste;
             lengde--;
         }
         return subListe;
@@ -118,21 +118,21 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         Objects.requireNonNull(verdi);
         Node<T> NyttNode = new Node<>(verdi);
         // sjekker om listen er helt tom, da peker hode og halle til den nye noden, antall endringer og antall noder øker med 1.
-        if (hode==null&& hale==null &&  antall == 0){
-            hode=NyttNode;
-            hale=NyttNode;
+        if (hode == null && hale == null && antall == 0) {
+            hode = NyttNode;
+            hale = NyttNode;
             endringer++;
             antall++;
             return true;
         }
         // hvis listen ikke er tom da er halen verdien før den som settes inn, bytter hale pekere til den nye noden og setter halen til nye node.
         else {
-            NyttNode.forrige=hale;
+            NyttNode.forrige = hale;
             hale.neste = NyttNode;
-            hale= NyttNode;
+            hale = NyttNode;
             endringer++;
             antall++;
-            return  true;
+            return true;
         }
 
     }
@@ -147,23 +147,23 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
-    private Node<T> finnNode(int indeks){
+    private Node<T> finnNode(int indeks) {
         //sjekker om indeks finnes i listen, returnerer false hvis ikke.
-        indeksKontroll(indeks,false);
+        indeksKontroll(indeks, false);
         Node<T> midlertidig;
 
         //hvis indeks er mindre enn liste/2 starter fra hode og setter hode til midlertidig node og setter pekeren til midlertidig.neste i hver iterasjon. stopper loopen på indeks.
-        if (indeks<antall/2){
-            midlertidig= hode;
-            for (int i = 0; i <indeks ; i++) {
-                midlertidig=midlertidig.neste;
+        if (indeks < antall / 2) {
+            midlertidig = hode;
+            for (int i = 0; i < indeks; i++) {
+                midlertidig = midlertidig.neste;
             }
             return midlertidig;
         }
         // Hvis indeks er større enn liste/2 starter fra hale og setter hale til midlertidig node og setter pekeren til midlertidig.forrige i hver iterasjon. stopper loopen ved indeks.
         else {
-            midlertidig= hale;
-            for (int i = 0; i >indeks ; i--) {
+            midlertidig = hale;
+            for (int i = antall-1; i > indeks; i--) {
                 midlertidig = midlertidig.forrige;
             }
             return midlertidig;
@@ -181,18 +181,25 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         throw new UnsupportedOperationException();
     }
 
-    private void fraTilKontroll(int tabellLengde, int fra,int til){
-        if (fra<0|| til>tabellLengde){
+    private void fraTilKontroll(int tabellLengde, int fra, int til) {
+        if (fra < 0 || til > tabellLengde) {
             throw new IndexOutOfBoundsException();
         }
-        if (fra>=til){
+        if (fra >= til) {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
     public T oppdater(int indeks, T nyverdi) {
-        throw new UnsupportedOperationException();
+        Objects.requireNonNull(nyverdi);
+        Node<T> Midlertidig = finnNode(indeks);
+
+        T gammelVerdi = Midlertidig.verdi;
+        endringer++;
+
+        Midlertidig.verdi = nyverdi;
+        return gammelVerdi;
     }
 
     @Override
@@ -218,7 +225,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         sb.append("[");
 
         //sjekker om listen er tom og returnerer tom string hvis den er.
-        if (tom()){
+        if (tom()) {
             sb.append("]");
             return sb.toString();
         }
@@ -226,7 +233,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         else {
             sb.append(midlertidig.verdi);
             midlertidig = midlertidig.neste;
-            while (midlertidig!=null){
+            while (midlertidig != null) {
                 sb.append(",");
                 sb.append(midlertidig.verdi);
                 midlertidig = midlertidig.neste;
@@ -241,7 +248,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         //sjekker om listen er tom og returnerer tom string hvis den er.
-        if (tom()){
+        if (tom()) {
             sb.append("]");
             return sb.toString();
         }
@@ -249,7 +256,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         else {
             sb.append(midlertidig.verdi);
             midlertidig = midlertidig.forrige;
-            while (midlertidig!=null){
+            while (midlertidig != null) {
                 sb.append(",");
                 sb.append(midlertidig.verdi);
                 midlertidig = midlertidig.forrige;
@@ -303,7 +310,6 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     public static <T> void sorter(Liste<T> liste, Comparator<? super T> c) {
         throw new UnsupportedOperationException();
     }
-
 
 
 }
