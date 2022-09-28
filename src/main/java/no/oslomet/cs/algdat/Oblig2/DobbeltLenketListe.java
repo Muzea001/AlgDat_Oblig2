@@ -171,6 +171,24 @@ public class DobbeltLenketListe<T> implements Liste<T> {
     }
 
     public String omvendtString() {
+        Node<T> midlertidig = hale;
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        if (tom()){
+            sb.append("]");
+            return sb.toString();
+        }
+        else {
+            sb.append(midlertidig.verdi);
+            midlertidig = midlertidig.forrige;
+            while (midlertidig!=null){
+                sb.append(",");
+                sb.append(midlertidig.verdi);
+                midlertidig = midlertidig.forrige;
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
