@@ -171,13 +171,12 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
         else {
             //hvis verdien skal legges i midten, bytter vi pekerene til forrige og neste node.
-            Node<T> node = new Node<T>(verdi,null,null);
-            hode = node;
-            for (int i = 0; i <indeks ; i++) {
-                node = node.neste;
+           Node<T> midlertidig = hode;
+            for (int i = 0; i <indeks ; i++) midlertidig = midlertidig.neste; {
+                midlertidig= new Node<T>(verdi,midlertidig.forrige,midlertidig);
             }
-            node.neste.forrige = node;
-            node.forrige.neste = node;
+            midlertidig.neste.forrige = midlertidig.forrige.neste = midlertidig;
+
         }
         antall++;
         endringer++;
@@ -264,21 +263,26 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public T fjern(int indeks) {
+        // kaller på indekskontroll for å sjekke om argument er lovlig.
         indeksKontroll(indeks,false);
         Node<T> midlertidig = hode;
         T verdi;
 
+        // sjekker om indeks er første verdi i listen, bytter hode pekere.
         if (indeks==0){
             verdi = midlertidig.verdi;
             if (midlertidig.neste!=null){
                 hode=midlertidig.neste;
                 hode.forrige=null;
             }
+            // om listen inneholder bare en verdi setter hode og hale til null.
             else {
                 hode=null;
                 hale = null;
             }
         }
+
+        // sjekker om indeks er siste verdi, bytter hale pekerene.
 
         else if(indeks==antall-1){
             midlertidig = hale;
@@ -286,6 +290,22 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             hale = midlertidig.forrige;
             hale.neste = null;
         }
+
+        // hvis indeks ligger i midten, looper i listen til vi når indeks posisjonen.
+
+        else {
+            for (int i = 0; i <indeks ; i++) {
+                midlertidig = midlertidig.neste;
+            }
+            verdi = midlertidig.verdi;
+            // node før den som fjernes skal peke til noden etter den som fjernes.
+            midlertidig.forrige.neste = midlertidig.neste;
+            // node etter den som fjernes skal peke til noden før den som fjernes.
+            midlertidig.neste.forrige=midlertidig.forrige;
+        }
+        antall++;
+        endringer++;
+        return verdi;
     }
 
     @Override
