@@ -171,7 +171,8 @@ public class DobbeltLenketListe<T> implements Liste<T> {
         }
         else {
             //hvis verdien skal legges i midten, bytter vi pekerene til forrige og neste node.
-            Node<T> node = hode;
+            Node<T> node = new Node<T>(verdi,null,null);
+            hode = node;
             for (int i = 0; i <indeks ; i++) {
                 node = node.neste;
             }
@@ -263,7 +264,28 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
     @Override
     public T fjern(int indeks) {
-        throw new UnsupportedOperationException();
+        indeksKontroll(indeks,false);
+        Node<T> midlertidig = hode;
+        T verdi;
+
+        if (indeks==0){
+            verdi = midlertidig.verdi;
+            if (midlertidig.neste!=null){
+                hode=midlertidig.neste;
+                hode.forrige=null;
+            }
+            else {
+                hode=null;
+                hale = null;
+            }
+        }
+
+        else if(indeks==antall-1){
+            midlertidig = hale;
+            verdi = hale.verdi;
+            hale = midlertidig.forrige;
+            hale.neste = null;
+        }
     }
 
     @Override
