@@ -4,9 +4,8 @@ package no.oslomet.cs.algdat.Oblig2;
 ////////////////// class DobbeltLenketListe //////////////////////////////
 
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
+import java.util.spi.CurrencyNameProvider;
 
 
 public class DobbeltLenketListe<T> implements Liste<T> {
@@ -342,7 +341,7 @@ public class DobbeltLenketListe<T> implements Liste<T> {
             // node etter den som fjernes skal peke til noden før den som fjernes.
             midlertidig.neste.forrige=midlertidig.forrige;
         }
-        antall++;
+        antall--;
         endringer++;
         return verdi;
     }
@@ -427,7 +426,16 @@ public class DobbeltLenketListe<T> implements Liste<T> {
 
         @Override
         public boolean hasNext() {
-            return denne != null;
+            if(!hasNext()){
+                throw  new NoSuchElementException("inden verdier !");
+            }
+            if (endringer!=iteratorendringer){
+                throw new ConcurrentModificationException("feil i antall endringer !");
+            }
+            T midlertidigVerdi = denne.verdi;
+            denne=denne.neste;
+            fjernOK = true;
+            return (boolean) midlertidigVerdi;
         }
 
         @Override
